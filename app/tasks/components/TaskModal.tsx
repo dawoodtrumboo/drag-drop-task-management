@@ -56,13 +56,19 @@ const TaskModal: React.FC<TaskModalProps> = ({
 
   // Handle form input changes
   const handleChange = (
-    value: string | Date | undefined,
+    value: string | Date | dayjs.Dayjs | undefined,
     name: string | undefined
   ) => {
     if (value !== undefined && name !== undefined) {
+      let newValue = value;
+
+      if (dayjs.isDayjs(value)) {
+        newValue = value.toDate(); // Convert Dayjs to Date
+      }
+
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: newValue,
       }));
     }
   };

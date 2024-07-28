@@ -38,11 +38,7 @@ const items: MenuItem[] = [
   { key: "/analytics", icon: <LineChartOutlined />, label: "Analytics" },
 ];
 
-export default function Home({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Home({ children }: { children: React.ReactNode }) {
   const [type, setType] = useState("signIn");
   const handleOnClick = (text: string) => {
     if (text !== type) {

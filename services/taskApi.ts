@@ -2,7 +2,6 @@ import {
   GetTaskParamsType,
   CreateTaskPayload,
   UpdateTaskPayload,
-  UpdateTaskParams,
   FindTaskParam,
 } from "@/types/TaskTypes";
 
@@ -14,11 +13,11 @@ const headers = (token: string) => ({
 });
 
 export const fetchTasks = async (params: GetTaskParamsType, token: string) => {
-  const { search, sortBy, sortOrder, userId } = params;
+  const { search, userId, startDate, endDate } = params;
   const queryString = new URLSearchParams({
     ...(search && { search }),
-    ...(sortBy && { sortBy }),
-    ...(sortOrder && { sortOrder }),
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
     userId,
   }).toString();
 

@@ -25,6 +25,7 @@ import Card from "./components/Card";
 import Icon1 from "../../public/assets/image1.svg";
 import Icon2 from "../../public/assets/image2.svg";
 import { withAuth } from "../withAuth";
+import { fetchTasks } from "@/services/taskApi";
 const { Search } = Input;
 
 const { RangePicker } = DatePicker;
@@ -43,7 +44,7 @@ const TaskLayout: React.FC = () => {
 
   const debouncedFetchTasks = useCallback(
     debounce((params: GetTaskParamsType) => {
-      fetchTasks(params);
+      getTasks(params);
     }, 600),
     []
   );
@@ -53,43 +54,19 @@ const TaskLayout: React.FC = () => {
   useEffect(() => {
     debouncedFetchTasks(tasksParams);
   }, [search, startDate, endDate]);
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const API_URL = "https://api.dawoodtrumboo.com";
 
-  const fetchTasks = async (params: GetTaskParamsType) => {
-    const { search, userId, startDate, endDate } = params;
-    const queryString = new URLSearchParams({
-      ...(search && { search }),
-      ...(startDate && { startDate }),
-      ...(endDate && { endDate }),
-      userId,
-    }).toString();
+  const getTasks = async (params: GetTaskParamsType) => {
     try {
-      const response = await fetch(`${API_URL}/api/tasks?${queryString}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userDetails.token}`,
-        },
-      });
-      const data = await response.json();
-      setTasks(data.data);
+      const fetchedTasks = await fetchTasks(params, user.token);
+      setTasks(fetchedTasks);
     } catch (error) {
       errorPopup(error.message);
     }
   };
 
   useEffect(() => {
-    fetchTasks(tasksParams);
+    getTasks(tasksParams);
   }, []);
-  // useEffect(() => {
-  //   if (fetchedTasks) {
-  //     setTasks(fetchedTasks?.data);
-  //   }
-
-  //   if (fetchTasksError) {
-  //     error("There was an error!");
-  //   }
-  // }, [fetchedTasks]);
 
   const view: TaskViewType = {
     boardview: <BoardView />,

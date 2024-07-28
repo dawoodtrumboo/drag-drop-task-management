@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { StoreContext } from "./context/context";
 
 export const withAuth = (WrappedComponent: any) => {
-  const auth = localStorage.getItem("userDetails");
   return function WithAuth(props: any) {
+    const auth = localStorage.getItem("userDetails");
     const session = auth && JSON.parse(auth);
     useEffect(() => {
       if (!session) {
