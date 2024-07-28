@@ -37,3 +37,16 @@ export const signup = async (body: SignupPayload) => {
   const data = await response.json();
   return data;
 };
+
+export const googleSignin = async (code:string) => {
+  const response = await fetch(`${API_URL}/google/callback?code${code}`, {
+  });
+
+  if (response.status >=500) {
+    throw new Error("Failed to add task");
+  }
+
+  const data = await response.json();
+  return data;
+};
+

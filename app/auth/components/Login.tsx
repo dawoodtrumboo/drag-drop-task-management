@@ -55,7 +55,7 @@ const Login: React.FC = () => {
       <form onSubmit={handleOnSubmit}>
         <h1 className="text-black text-3xl font-bold">Sign In</h1>
         <div className="social-container">
-          <a className="social" href={`${"baseURL"}/auth/google`}>
+          <a className="social" href={`https://api.dawoodtrumboo.com/auth/google`}>
             <GooglePlusOutlined className="text-[#333] text-lg" />
           </a>
         </div>

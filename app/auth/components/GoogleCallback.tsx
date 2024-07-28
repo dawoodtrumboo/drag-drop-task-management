@@ -1,21 +1,24 @@
-import { useEffect, useLayoutEffect } from "react";
+import { StoreContext } from "@/app/context/context";
+import { googleSignin } from "@/services/authApi";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useLayoutEffect } from "react";
 
 const GoogleCallback: React.FC = () => {
   const query = new URLSearchParams(location.search);
   const code = query.get("code"); // The authorization code from Google
-
-  useLayoutEffect(() => {
-    // Exchange the authorization code for a token
+  const{setAuth} = useContext(StoreContext)
+  const router = useRouter()
+  useEffect(() => {
+    
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `${"import.meta.env.VITE_API_BASE_URL"}/auth/google/callback?code=${code}`
-        );
-        const data = await response.json();
-
+        const data = await googleSignin(code);
+        console.log(data)
         if (data) {
           // Save the token and user data in local storage or context
           localStorage.setItem("userDetails", JSON.stringify(data));
+          setAuth(data);
+          router.push("/");
 
           // Optionally, you could save user data to context or state
         }
