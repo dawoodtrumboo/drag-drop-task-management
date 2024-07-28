@@ -25,8 +25,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
   const { auth, user } = useContext(StoreContext);
   const taskParams = {
     taskId: data.id,
-    userId: user.user.id,
-    token: user.token,
+    userId: user?.user.id,
+    token: user?.token,
   };
   const date = new Date(data.updatedAt);
   const readableDate = timeAgo(date);
@@ -106,7 +106,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
         </Tag>
         <Flex className=" text-gray-600 mb-3" gap={5}>
           <ClockCircleOutlined className="text-lg" />
-          {dayjs(data.deadline).format("DD-MM-YYYY")}
+          {data.deadline && dayjs(data.deadline).format("DD-MM-YYYY") || "No deadline"}
         </Flex>
         <Flex justify="space-between" align="center">
           <span className="text-xs font-semibold text-gray-400">

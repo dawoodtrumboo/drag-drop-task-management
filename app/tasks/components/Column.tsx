@@ -15,7 +15,7 @@ import { addTask, updateTask } from "@/services/taskApi";
 
 const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [isAscending, setIsAscending] = useState(true);
+  const [isAscending, setIsAscending] = useState(false);
   const {
     success,
     error: errorPopup,

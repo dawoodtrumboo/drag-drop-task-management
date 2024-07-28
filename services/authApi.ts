@@ -9,10 +9,11 @@ const headers = () => ({
 export const signin = async (body: LoginPayload) => {
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
+    headers:headers(),
     body: JSON.stringify(body),
   });
 
-  if (!response.ok) {
+  if (response.status >=500) {
     throw new Error("Failed to add task");
   }
   console.log(response);
@@ -29,7 +30,7 @@ export const signup = async (body: SignupPayload) => {
     body: JSON.stringify(body),
   });
 
-  if (!response.ok) {
+  if (response.status >=500) {
     throw new Error("Failed to add task");
   }
 

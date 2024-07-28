@@ -1,29 +1,18 @@
 "use client";
+
 import "./globals.css";
 import {
-  Avatar,
-  Button,
-  Dropdown,
-  Flex,
   Layout,
-  Menu,
+
   MenuProps,
-  Space,
-  Typography,
+
 } from "antd";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+
 import React, { useState } from "react";
 import {
   AppstoreOutlined,
-  BellOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
   HomeOutlined,
   LineChartOutlined,
-  MailOutlined,
-  PieChartOutlined,
-  PlusCircleFilled,
-  QuestionCircleOutlined,
   SettingOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -38,8 +27,9 @@ const items: MenuItem[] = [
   { key: "/analytics", icon: <LineChartOutlined />, label: "Analytics" },
 ];
 
-export default function Home({ children }: { children: React.ReactNode }) {
+const Home = () => {
   const [type, setType] = useState("signIn");
+
   const handleOnClick = (text: string) => {
     if (text !== type) {
       setType(text);
@@ -49,5 +39,8 @@ export default function Home({ children }: { children: React.ReactNode }) {
 
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
-  return <Layout className="min-h-screen">{children}</Layout>;
+    
+  return <Layout className="min-h-screen"></Layout>;
 }
+
+export default Home;

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { LoginResponse } from "@/types/AuthTypes";
 import { FetchedTask } from "@/types/TaskTypes";
@@ -48,10 +48,15 @@ export const StoreProvider = ({
   const [tasks, setTasks] = useState<FetchedTask[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
-  const data = localStorage.getItem("userDetails");
-  const user = JSON.parse(data);
+  let user;
+
+  if (typeof window !== "undefined"){
+    const data =localStorage?.getItem("userDetails");
+    user = JSON.parse(data);
+  }
+ 
   useLayoutEffect(() => {
-    if (data) {
+    if (user) {
       try {
         setAuth(user);
       } catch (error) {

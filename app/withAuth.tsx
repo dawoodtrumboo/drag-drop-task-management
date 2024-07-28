@@ -6,15 +6,19 @@ import { StoreContext } from "./context/context";
 
 export const withAuth = (WrappedComponent: any) => {
   return function WithAuth(props: any) {
-    const auth = localStorage.getItem("userDetails");
-    const session = auth && JSON.parse(auth);
+    let user;
+  if (typeof window !== "undefined"){
+    const data =localStorage?.getItem("userDetails");
+    user = JSON.parse(data);
+  }
+
     useEffect(() => {
-      if (!session) {
+      if (!user) {
         redirect("/auth");
       }
     }, []);
 
-    if (!session) {
+    if (!user) {
       return null;
     }
     return <WrappedComponent {...props} />;

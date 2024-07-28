@@ -48,7 +48,11 @@ export default function BaseLayout({
 }>) {
   const router = usePathname();
   const { logout } = useContext(StoreContext);
-  const user = JSON.parse(localStorage.getItem("userDetails"));
+  let user;
+  if (typeof window !== "undefined"){
+    const data =localStorage?.getItem("userDetails");
+    user = JSON.parse(data);
+  }
 
   const name = user?.user.name.split(" ")[0];
   const [type, setType] = useState("signIn");
