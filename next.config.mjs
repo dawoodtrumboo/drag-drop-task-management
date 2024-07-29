@@ -8,6 +8,12 @@ const nextConfig = {
         destination: "/auth",
         permanent: true,
       },
+      {
+        source: "/tasks",
+        destination: "/",
+        permanent: true,
+      },
+
 
 
     ];

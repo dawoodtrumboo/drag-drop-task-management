@@ -123,7 +123,7 @@ const TaskLayout: React.FC = () => {
   };
   return (
     <Layout>
-      <Flex align="center" gap={5} className="mb-5">
+      <Flex align="center" gap={5} className="mb-5 overflow-x-scroll">
         {cardData.map((card) => (
           <Card
             title={card.title}

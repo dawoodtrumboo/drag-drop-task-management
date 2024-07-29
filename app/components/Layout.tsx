@@ -72,7 +72,7 @@ export default function BaseLayout({
         breakpoint="lg"
         collapsedWidth="0"
         className="py-8 px-1"
-        zeroWidthTriggerStyle={{ color: "black" }}
+        zeroWidthTriggerStyle={{ color: "black",top:'55px' }}
       >
         <Space>
           <Avatar shape="square" />
@@ -105,7 +105,7 @@ export default function BaseLayout({
       >
         <Header style={{ padding: 0 }}>
           <Flex justify="space-between" align="center">
-            <h1 className="!text-gray-900 text-3xl">Good Morning, {name}!</h1>
+            <h1 className="!text-gray-900 text-lg sm:text-3xl">Good Morning, {name}!</h1>
             <Flex gap={8} align="center">
               <h2 className="text-md">Help & feedback</h2>
               <QuestionCircleOutlined />
