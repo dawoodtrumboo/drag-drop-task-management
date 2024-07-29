@@ -56,7 +56,8 @@ export const addTask = async (body: CreateTaskPayload, token: string) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to add task");
+    const error = await response.json();
+    throw new Error(error.message);
   }
 
   const data = await response.json();

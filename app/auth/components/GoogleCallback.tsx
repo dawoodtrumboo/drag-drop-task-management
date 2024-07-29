@@ -40,7 +40,7 @@ const GoogleCallback: React.FC = () => {
   }, []);
 
   return  <div className='h-screen w-screen flex items-center justify-center'>
-  <LoadingOutlined size={100}/>
+  <LoadingOutlined className="text-[100px]"/>
   </div>;
 };
 

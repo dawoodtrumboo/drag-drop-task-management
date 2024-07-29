@@ -107,6 +107,9 @@ export const StoreProvider = ({
     router.push("/auth");
   };
 
+
+  
+
   return (
     <StoreContext.Provider
       value={{

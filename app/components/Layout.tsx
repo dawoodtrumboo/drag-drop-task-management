@@ -63,6 +63,7 @@ export default function BaseLayout({
     }
   };
 
+  
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
   return router === "/tasks"? (
@@ -92,10 +93,7 @@ export default function BaseLayout({
           mode="inline"
           items={items}
         />
-        <Button type="primary" className="w-full py-5 text-md ">
-          Create new task
-          <PlusCircleFilled />
-        </Button>
+       
       </Sider>
       <Layout
         style={{

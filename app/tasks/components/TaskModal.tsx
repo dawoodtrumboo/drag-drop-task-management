@@ -178,6 +178,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
       title={drawerHeader}
       onClose={onClose}
       open={open}
+      rootClassName="!bg-[#00000020]"
     >
       <Input
         name="title"

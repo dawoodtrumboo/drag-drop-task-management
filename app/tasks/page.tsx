@@ -13,19 +13,20 @@ import {
   AppstoreOutlined,
   BarsOutlined,
   CalendarOutlined,
+  PlusCircleFilled,
   PlusOutlined,
 } from "@ant-design/icons";
 import BoardView from "./components/BoardView";
 import ListView from "./components/ListView";
 import TaskModal from "./components/TaskModal";
 import debounce from "lodash/debounce";
-import { GetTaskParamsType, TaskViewType } from "@/types/TaskTypes";
+import { CreateTaskPayload, GetTaskParamsType, TaskViewType } from "@/types/TaskTypes";
 import { StoreContext } from "../context/context";
 import Card from "./components/Card";
 import Icon1 from "../../public/assets/image1.svg";
 import Icon2 from "../../public/assets/image2.svg";
 import { withAuth } from "../withAuth";
-import { fetchTasks } from "@/services/taskApi";
+import { addTask, fetchTasks } from "@/services/taskApi";
 const { Search } = Input;
 
 const { RangePicker } = DatePicker;
@@ -34,7 +35,7 @@ const TaskLayout: React.FC = () => {
   const [currentView, setCurrentView] =
     useState<keyof TaskViewType>("boardview");
   const [modalOpen, setModalOpen] = useState(false);
-  const { setTasks, error: errorPopup, user } = useContext(StoreContext);
+  const { setTasks, error: errorPopup, user,loading,success} = useContext(StoreContext);
   const [tasksParams, setTasksParams] = useState<GetTaskParamsType>({
     search: "",
     userId: user?.user.id || "",
@@ -77,12 +78,20 @@ const TaskLayout: React.FC = () => {
     setTasksParams((prev) => ({ ...prev, search: e.target.value }));
   };
 
-  const handleSortChange = (value: string) => {
-    setTasksParams((prev) => ({ ...prev, sortBy: value }));
-  };
 
-  const handleAddTask = () => {
+  const handleAddTask = async(body:CreateTaskPayload) => {
     // Implement the logic for adding a task
+    loading();
+    try {
+      const task = await addTask(body, user.token);
+      setTasks((prev) => [...prev, task]);
+      setModalOpen(false);
+      success("Task added successfully!");
+    } catch (error) {
+      errorPopup(error.message);
+    } finally {
+      loading(false);
+    }
   };
   const cardData = [
     {
@@ -161,19 +170,20 @@ const TaskLayout: React.FC = () => {
             onChange={handleSearchChange}
           />
 
-          {currentView === "listview" && (
+          
             <Button
               type="primary"
-              icon={<PlusOutlined />}
+    
               onClick={() => setModalOpen(true)}
             >
-              Add Task
+                Create new task
+          <PlusCircleFilled />
             </Button>
-          )}
+          
         </Flex>
       </Flex>
-      <Layout className="my-[24px]">{view[currentView]}</Layout>
-      {modalOpen && (
+      <Layout className="my-[24px]">{view[currentView]}
+       {modalOpen && (
         <TaskModal
           open={modalOpen}
           handleCancel={() => setModalOpen(false)}
@@ -183,7 +193,8 @@ const TaskLayout: React.FC = () => {
           data={undefined}
           type="Open"
         />
-      )}
+      )}</Layout>
+     
     </Layout>
   );
 };
