@@ -65,7 +65,7 @@ export default function BaseLayout({
 
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
-  return router !== "/auth" && "/auth/google" && '/auth/google/callback' ? (
+  return router === "/tasks"? (
     <Layout className="min-h-screen">
       <Sider
         breakpoint="lg"

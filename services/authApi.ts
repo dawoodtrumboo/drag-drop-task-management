@@ -39,7 +39,7 @@ export const signup = async (body: SignupPayload) => {
 };
 
 export const googleSignin = async (code:string|string[]) => {
-  const response = await fetch(`${API_URL}/google/callback?code${code}`, {
+  const response = await fetch(`${API_URL}/google/callback?code=${code}`, {
   });
 
   if (response.status >=500) {

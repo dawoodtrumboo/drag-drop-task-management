@@ -1,13 +1,12 @@
-"use client"
 import React from 'react'
 
-
-const Google = () => {
+const Page = (props) => {
+  console.log(props)
   return (
     <div>
-
+      
     </div>
   )
 }
 
-export default Google
+export default Page

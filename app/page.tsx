@@ -8,7 +8,7 @@ import {
 
 } from "antd";
 
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   AppstoreOutlined,
   HomeOutlined,
@@ -16,6 +16,8 @@ import {
   SettingOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import { useRouter } from "next/router";
+import { StoreContext } from "./context/context";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -36,6 +38,9 @@ const Home = () => {
       return;
     }
   };
+
+
+
 
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
