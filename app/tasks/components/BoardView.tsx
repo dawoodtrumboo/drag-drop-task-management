@@ -68,7 +68,7 @@ const BoardView: React.FC = () => {
         <Flex
           vertical={isMobile}
           gap={24}
-          className="overflow-x-scroll w-full "
+          className="overflow-x-scroll w-full py-5"
         >
           <Column
             columnId="Open"
