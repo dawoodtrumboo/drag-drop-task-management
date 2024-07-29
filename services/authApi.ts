@@ -38,7 +38,7 @@ export const signup = async (body: SignupPayload) => {
   return data;
 };
 
-export const googleSignin = async (code:string) => {
+export const googleSignin = async (code:string|string[]) => {
   const response = await fetch(`${API_URL}/google/callback?code${code}`, {
   });
 
