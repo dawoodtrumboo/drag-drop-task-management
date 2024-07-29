@@ -91,7 +91,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
           className="text-xs text-gray-400 font-light !mb-0"
           style={{ paddingBottom: "0" }}
         >
-          {data.description}Develop and integrate user authentication
+          {data.description}
         </Paragraph>
         <Tag
           className={`text-white border-none my-3 ${
