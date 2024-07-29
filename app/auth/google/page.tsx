@@ -1,11 +1,13 @@
+"use client"
 import React from 'react'
 
-const Auth = () => {
+
+const Google = () => {
   return (
     <div>
-      
+
     </div>
   )
 }
 
-export default Auth
+export default Google

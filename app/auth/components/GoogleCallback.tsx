@@ -1,3 +1,4 @@
+"use client"
 import { StoreContext } from "@/app/context/context";
 import { googleSignin } from "@/services/authApi";
 import { useRouter } from "next/router";
