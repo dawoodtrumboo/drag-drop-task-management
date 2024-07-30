@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+.amplify-hosting
+node_modules/
+build/
+dist/
+tmp/
+temp/
+.env

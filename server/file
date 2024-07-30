@@ -1,0 +1,5 @@
+rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.env' \
+-e "ssh -i ~/.ssh/mumbai-dawood-macbook.pem" \
+. ec2-user@ec2-3-6-93-212.ap-south-1.compute.amazonaws.com:~/app
+
+ssh -i "mumbai-dawood-macbook.pem" ec2-user@ec2-3-6-93-212.ap-south-1.compute.amazonaws.com
