@@ -54,7 +54,10 @@ const Signup: React.FC = () => {
       <form onSubmit={handleOnSubmit}>
         <h1 className="text-black text-3xl font-bold">Create Account</h1>
         <div className="social-container">
-          <a className="social" href={`https://api.dawoodtrumboo.com/auth/google`}>
+          <a
+            className="social"
+            href={`https://server.dawoodtrumboo.com/auth/google`}
+          >
             <GooglePlusOutlined className="text-[#333] text-lg" />
           </a>
         </div>
@@ -96,7 +99,7 @@ const Signup: React.FC = () => {
           </ul>
         </div>
 
-        <button className="bg-[#5042ae] text-white font-bold px-[45px] py-[10px] uppercase transition-transform 80ms ease-in rounded-full text-xs">
+        <button className="bg-[#438ACC] text-white font-bold px-[45px] py-[10px] uppercase transition-transform 80ms ease-in rounded-full text-xs">
           Sign Up
         </button>
       </form>

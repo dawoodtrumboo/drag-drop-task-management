@@ -7,22 +7,20 @@ import { StoreContext } from "@/app/context/context";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { deleteTask, fetchTaskById } from "@/services/taskApi";
 import dayjs from "dayjs";
+import { TaskContext } from "@/app/context/task.context";
 
 const { Title, Paragraph } = Typography;
 
 const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [popoverVisible, setPopoverVisible] = useState<boolean>(false);
-  const {
-    success,
-    tasks,
-    setTasks,
-    error: errorPopup,
-    loading,
-  } = useContext(StoreContext);
+  const { success, error: errorPopup, loading } = useContext(StoreContext);
+
+  const { tasks, setTasks, modalOpen, setModalOpen, handleDelete } =
+    useContext(TaskContext);
+
   const [task, setTask] = useState<FetchedTask | undefined>(undefined);
 
-  const { auth, user } = useContext(StoreContext);
+  const { user } = useContext(StoreContext);
   const taskParams = {
     taskId: data.id,
     userId: user?.user.id,
@@ -31,27 +29,27 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
   const date = new Date(data.updatedAt);
   const readableDate = timeAgo(date);
 
-  const handleDelete = async () => {
-    loading();
-    try {
-      await deleteTask(taskParams);
-      const filteredTasks = tasks.filter((task) => task.id !== data.id);
-      setTasks(filteredTasks);
-      success("Task deleted successfully");
-      setModalOpen(false);
-    } catch (error) {
-      errorPopup(error.message);
-    } finally {
-      loading(false);
-    }
-  };
+  // const handleDelete = async (taskParams) => {
+  //   loading();
+  //   try {
+  //     await deleteTask(taskParams);
+  //     const filteredTasks = tasks.filter((task) => task.id !== data.id);
+  //     setTasks(filteredTasks);
+  //     success("Task deleted successfully");
+  //     setModalOpen("");
+  //   } catch (error) {
+  //     errorPopup(error.message);
+  //   } finally {
+  //     loading(false);
+  //   }
+  // };
 
   const onEdit = async () => {
     try {
       loading();
       const task = await fetchTaskById(taskParams);
       setTask(task);
-      setModalOpen(true);
+      setModalOpen(`tascard-${data.id}`);
     } catch (error) {
       errorPopup(error.message);
     } finally {
@@ -73,7 +71,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
         okText="Yes"
         cancelText="No"
         okButtonProps={{ loading: false }}
-        onConfirm={() => handleDelete()}
+        onConfirm={() => handleDelete(taskParams, data.id)}
       >
         <div className="px-2 cursor-pointer py-1 text-center text-red-500">
           Delete
@@ -106,7 +104,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
         </Tag>
         <Flex className=" text-gray-600 mb-3" gap={5}>
           <ClockCircleOutlined className="text-lg" />
-          {data.deadline && dayjs(data.deadline).format("DD-MM-YYYY") || "No deadline"}
+          {(data.deadline && dayjs(data.deadline).format("DD-MM-YYYY")) ||
+            "No deadline"}
         </Flex>
         <Flex justify="space-between" align="center">
           <span className="text-xs font-semibold text-gray-400">
@@ -136,10 +135,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
           </Popover>
         </Flex>
       </Card>
-      {modalOpen && (
+      {modalOpen == `tascard-${data.id}` && (
         <TaskModal
-          open={modalOpen}
-          handleCancel={() => setModalOpen(false)}
+          open={modalOpen == `tascard-${data.id}`}
+          handleCancel={() => setModalOpen("")}
           handleOk={handleOk}
           isLoading={false}
           title="Edit Task"

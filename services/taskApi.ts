@@ -5,7 +5,7 @@ import {
   FindTaskParam,
 } from "@/types/TaskTypes";
 
-const API_URL = "https://api.dawoodtrumboo.com/api";
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
 const headers = (token: string) => ({
   "Content-Type": "application/json",

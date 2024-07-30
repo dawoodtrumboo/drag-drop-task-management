@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 
 export type TaskViewType = {
-  boardview: ReactElement;
-  listview: ReactElement;
+  Kanban: ReactElement;
+  List: ReactElement;
 };
 
 export interface TaskModalProps {

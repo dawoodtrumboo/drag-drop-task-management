@@ -3,13 +3,13 @@ import { theme } from "antd";
 export const LightTheme = {
   algorithm: theme.defaultAlgorithm,
   token: {
-    colorPrimary: "#5042ae",
+    colorPrimary: "#438ACC",
     colorError: "#FF6B6B",
     colorInfo: "#0038FF",
     colorSuccess: "#0ECC5A",
     colorWarning: "##FFA235",
     colorTextBase: "#4C575D",
-    colorTextHeading: "#5042ae",
+    colorTextHeading: "#438ACC",
 
     colorBgBase: "#F9F9F9",
     colorBgContainer: "#fff",

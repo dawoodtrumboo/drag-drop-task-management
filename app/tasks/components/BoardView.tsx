@@ -19,9 +19,11 @@ import { Flex, Layout } from "antd";
 import React, { useContext, useLayoutEffect, useState } from "react";
 import { StoreContext } from "@/app/context/context";
 import { updateTask } from "@/services/taskApi";
+import { TaskContext } from "@/app/context/task.context";
 
 const BoardView: React.FC = () => {
-  const { tasks, setTasks, user } = React.useContext(StoreContext);
+  const {  user } = React.useContext(StoreContext);
+  const {tasks,setTasks } = useContext(TaskContext)
 
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
@@ -68,7 +70,7 @@ const BoardView: React.FC = () => {
         <Flex
           vertical={isMobile}
           gap={24}
-          className="overflow-x-scroll w-full py-5"
+          className="overflow-x-scroll w-full "
         >
           <Column
             columnId="Open"

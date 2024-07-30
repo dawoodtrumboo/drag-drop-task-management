@@ -18,34 +18,6 @@ body {
   }
 }
 
-body {
-  overflow: hidden;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-/* Show scrollbar on scroll */
-body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-body::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-body:hover {
-  overflow: auto; /* Show scrollbar on hover */
-}
-
-body:hover::-webkit-scrollbar {
-  display: block;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
 .Auth {
   font-family: sans-serif;
   text-align: center;
@@ -85,9 +57,9 @@ a {
 
 .auth button {
   border-radius: 20px;
-  border: 1px solid #5042ae;
-  background-color: #5042ae;
-  color: #5042ae;
+  border: 1px solid #438acc;
+  background-color: #438acc;
+  color: #438acc;
   font-size: 12px;
   font-weight: bold;
   padding: 12px 45px;
@@ -106,7 +78,7 @@ button:focus {
 
 button.ghost {
   background-color: transparent;
-  border-color: #5042ae;
+  border-color: #438acc;
 }
 
 form {
@@ -200,13 +172,13 @@ input {
 }
 
 .overlay {
-  background: #5042ae;
-  background: -webkit-linear-gradient(to right, #afa3ff, #ffffff);
-  background: linear-gradient(to right, #afa3ff, #ffffff);
+  background: #438acc;
+  background: -webkit-linear-gradient(to right, #438acc, #ffffff);
+  background: linear-gradient(to right, #438acc, #ffffff);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
-  color: #5042ae;
+  color: #438acc;
   position: relative;
   left: -100%;
   height: 100%;
@@ -289,4 +261,11 @@ footer i {
 footer a {
   color: #3c97bf;
   text-decoration: none;
+}
+
+.html-rederer {
+  padding-inline: 1rem;
+}
+.html-rederer li {
+  list-style: disc;
 }

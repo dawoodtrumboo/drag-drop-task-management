@@ -11,7 +11,7 @@ import {
   Space,
   Typography,
 } from "antd";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   AppstoreOutlined,
   BellOutlined,
@@ -25,18 +25,19 @@ import {
   QuestionCircleOutlined,
   SettingOutlined,
   TeamOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { usePathname } from "next/navigation";
 import { StoreContext } from "../context/context";
+import Logo from "../../public/assets/logo.svg";
+import { TaskContext } from "../context/task.context";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const items: MenuItem[] = [
-  { key: "/tasks", icon: <HomeOutlined />, label: "Home" },
-  { key: "/boards", icon: <AppstoreOutlined />, label: "Boards" },
+  { key: "/tasks", icon: <AppstoreOutlined />, label: "Tasks" },
+
   { key: "/settings", icon: <SettingOutlined />, label: "Settings" },
-  { key: "/teams", icon: <TeamOutlined />, label: "Teams" },
-  { key: "/analytics", icon: <LineChartOutlined />, label: "Analytics" },
 ];
 
 const { Header, Content, Sider } = Layout;
@@ -47,14 +48,20 @@ export default function BaseLayout({
   children: React.ReactNode;
 }>) {
   const router = usePathname();
-  const { logout } = useContext(StoreContext);
+  const { logout } = useContext(TaskContext);
   let user;
-  if (typeof window !== "undefined"){
-    const data =localStorage?.getItem("userDetails");
+  if (typeof window !== "undefined") {
+    const data = localStorage?.getItem("userDetails");
     user = JSON.parse(data);
   }
+  const [name, setName] = useState("");
 
-  const name = user?.user.name.split(" ")[0];
+  useEffect(() => {
+    if (user) {
+      setName(user?.user?.name.split(" ")[0]);
+    }
+  }, [user]);
+
   const [type, setType] = useState("signIn");
   const handleOnClick = (text: string) => {
     if (text !== type) {
@@ -63,37 +70,40 @@ export default function BaseLayout({
     }
   };
 
-  
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
-  return router === "/tasks"? (
+  return router === "/tasks" ? (
     <Layout className="min-h-screen">
       <Sider
         breakpoint="lg"
+        width="250px"
         collapsedWidth="0"
-        className="py-8 px-1"
-        zeroWidthTriggerStyle={{ color: "black",top:'55px' }}
+        className="py-2 px-3"
+        zeroWidthTriggerStyle={{ color: "black" }}
       >
-        <Space>
-          <Avatar shape="square" />
-          <h2 className="!text-gray-800 font-semibold text-lg">
-            {user?.user.name}
-          </h2>
-        </Space>
-        <Flex justify="space-between" className="my-3">
-          <Button icon={<BellOutlined />} className="border-none" />
-          <Button className="bg-gray-200 border-none" onClick={() => logout()}>
-            Logout
-          </Button>
-        </Flex>
+        <Flex vertical justify="space-between" className="h-full pb-5">
+          <Flex vertical>
+            <Logo width="140px" height="70px" />
 
-        <Menu
-          defaultSelectedKeys={[router]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          items={items}
-        />
-       
+            <Menu
+              defaultSelectedKeys={[router]}
+              defaultOpenKeys={["sub1"]}
+              mode="inline"
+              items={items}
+            />
+          </Flex>
+
+          <Space>
+            <Avatar
+              shape="square"
+              className="bg-primaryColor"
+              icon={<UserOutlined className="text-white" />}
+            />
+            <h2 className="!text-gray-800 font-semibold text-md">
+              {user?.user.name}
+            </h2>
+          </Space>
+        </Flex>
       </Sider>
       <Layout
         style={{
@@ -103,12 +113,18 @@ export default function BaseLayout({
           marginInline: "auto",
         }}
       >
-        <Header style={{ padding: 0 }}>
+        <Header style={{ padding: 0 }} className="my-3">
           <Flex justify="space-between" align="center">
-            <h1 className="!text-gray-900 text-lg sm:text-3xl">Good Morning, {name}!</h1>
-            <Flex gap={8} align="center">
-              <h2 className="text-md">Help & feedback</h2>
-              <QuestionCircleOutlined />
+            <h1 className="!text-gray-900 text-3xl">Good Morning, {name}</h1>
+
+            <Flex gap={10}>
+              <Button icon={<BellOutlined />} className="border-none" />
+              <Button
+                className="bg-gray-200 border-none"
+                onClick={() => logout()}
+              >
+                Logout
+              </Button>
             </Flex>
           </Flex>
         </Header>

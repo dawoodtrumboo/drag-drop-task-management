@@ -20,22 +20,35 @@ import BoardView from "./components/BoardView";
 import ListView from "./components/ListView";
 import TaskModal from "./components/TaskModal";
 import debounce from "lodash/debounce";
-import { CreateTaskPayload, GetTaskParamsType, TaskViewType } from "@/types/TaskTypes";
+import {
+  CreateTaskPayload,
+  GetTaskParamsType,
+  TaskViewType,
+} from "@/types/TaskTypes";
 import { StoreContext } from "../context/context";
 import Card from "./components/Card";
 import Icon1 from "../../public/assets/image1.svg";
 import Icon2 from "../../public/assets/image2.svg";
 import { withAuth } from "../withAuth";
 import { addTask, fetchTasks } from "@/services/taskApi";
+import { TaskContext, TaskProvider } from "../context/task.context";
 const { Search } = Input;
 
 const { RangePicker } = DatePicker;
 
 const TaskLayout: React.FC = () => {
-  const [currentView, setCurrentView] =
-    useState<keyof TaskViewType>("boardview");
-  const [modalOpen, setModalOpen] = useState(false);
-  const { setTasks, error: errorPopup, user,loading,success} = useContext(StoreContext);
+  const [currentView, setCurrentView] = useState("Kanban");
+
+  const {
+    error: errorPopup,
+    user,
+    loading,
+    success,
+  } = useContext(StoreContext);
+
+  const { handleAddTask, setTasks, modalOpen, setModalOpen } =
+    useContext(TaskContext);
+
   const [tasksParams, setTasksParams] = useState<GetTaskParamsType>({
     search: "",
     userId: user?.user.id || "",
@@ -70,29 +83,14 @@ const TaskLayout: React.FC = () => {
   }, []);
 
   const view: TaskViewType = {
-    boardview: <BoardView />,
-    listview: <ListView />,
+    Kanban: <BoardView />,
+    List: <ListView />,
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTasksParams((prev) => ({ ...prev, search: e.target.value }));
   };
 
-
-  const handleAddTask = async(body:CreateTaskPayload) => {
-    // Implement the logic for adding a task
-    loading();
-    try {
-      const task = await addTask(body, user.token);
-      setTasks((prev) => [...prev, task]);
-      setModalOpen(false);
-      success("Task added successfully!");
-    } catch (error) {
-      errorPopup(error.message);
-    } finally {
-      loading(false);
-    }
-  };
   const cardData = [
     {
       title: "Introducing Tags",
@@ -143,26 +141,25 @@ const TaskLayout: React.FC = () => {
           options={[
             {
               value: "Kanban",
-              icon: (
-                <AppstoreOutlined onClick={() => setCurrentView("boardview")} />
-              ),
+              icon: <AppstoreOutlined />,
             },
             {
               value: "List",
-              icon: <BarsOutlined onClick={() => setCurrentView("listview")} />,
+              icon: <BarsOutlined />,
             },
           ]}
+          onChange={(value) => {
+            setCurrentView(value);
+          }}
         />
 
         <Flex gap={24}>
           <RangePicker
             suffixIcon={<CalendarOutlined size={24} />}
-            format="DD/MM/YYYY"
+            format="MM/DD/YYYY"
             name="deadline"
             size="small"
             onChange={handleDateRangeChange}
-            // style={{backgroundColor:}}
-            // onChange={(date, dateString) => handleChange(date, "deadline")}
             className="border-none !bg-transparent w-full tracking-wider !outline-none !shadow-none focus:!outline-none focus:!shadow-none focus-within:!outline-none h-8"
           />
           <Search
@@ -170,31 +167,26 @@ const TaskLayout: React.FC = () => {
             onChange={handleSearchChange}
           />
 
-          
-            <Button
-              type="primary"
-    
-              onClick={() => setModalOpen(true)}
-            >
-                Create new task
-          <PlusCircleFilled />
-            </Button>
-          
+          <Button type="primary" onClick={() => setModalOpen("tasks")}>
+            Create new task
+            <PlusCircleFilled />
+          </Button>
         </Flex>
       </Flex>
-      <Layout className="my-[24px]">{view[currentView]}
-       {modalOpen && (
-        <TaskModal
-          open={modalOpen}
-          handleCancel={() => setModalOpen(false)}
-          handleOk={handleAddTask}
-          isLoading={false}
-          title="Add Task"
-          data={undefined}
-          type="Open"
-        />
-      )}</Layout>
-     
+      <Layout className="my-[24px]">
+        {view[currentView]}
+        {modalOpen && (
+          <TaskModal
+            open={modalOpen == "tasks"}
+            handleCancel={() => setModalOpen("")}
+            handleOk={handleAddTask}
+            isLoading={false}
+            title="Add Task"
+            data={undefined}
+            type="Open"
+          />
+        )}
+      </Layout>
     </Layout>
   );
 };

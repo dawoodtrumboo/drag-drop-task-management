@@ -12,53 +12,58 @@ import {
 } from "@/types/TaskTypes";
 import { StoreContext } from "@/app/context/context";
 import { addTask, updateTask } from "@/services/taskApi";
+import { TaskContext } from "@/app/context/task.context";
 
 const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const{modalOpen,setModalOpen,handleAddTask,handleUpdate} = useContext(TaskContext)
+  
   const [isAscending, setIsAscending] = useState(false);
   const {
     success,
     error: errorPopup,
     loading,
-    setTasks,
     user,
   } = useContext(StoreContext);
+
+
+
   const [filteredTasks, setFilteredTasks] = useState(tasks);
 
   useLayoutEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
-  const handleAdd = async (body: CreateTaskPayload) => {
-    loading();
-    try {
-      const task = await addTask(body, user.token);
-      setTasks((prev) => [...prev, task]);
-      setModalOpen(false);
-      success("Task added successfully!");
-    } catch (error) {
-      errorPopup(error.message);
-    } finally {
-      loading(false);
-    }
-  };
 
-  const handleUpdate = async (body: UpdateTaskPayload) => {
-    loading();
-    try {
-      const updatedTask = await updateTask(body, user.token);
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === updatedTask.id ? updatedTask : task
-        )
-      );
-      setModalOpen(false);
-      success("Task update successfully!");
-    } catch (error) {
-      errorPopup(error.message);
-    } finally {
-      loading(false);
-    }
-  };
+  // const handleAdd = async (body: CreateTaskPayload) => {
+  //   loading();
+  //   try {
+  //     const task = await addTask(body, user.token);
+  //     setTasks((prev) => [...prev, task]);
+  //     setModalOpen(false);
+  //     success("Task added successfully!");
+  //   } catch (error) {
+  //     errorPopup(error.message);
+  //   } finally {
+  //     loading(false);
+  //   }
+  // };
+
+  // const handleUpdate = async (body: UpdateTaskPayload) => {
+  //   loading();
+  //   try {
+  //     const updatedTask = await updateTask(body, user.token);
+  //     setTasks((prevTasks) =>
+  //       prevTasks.map((task) =>
+  //         task.id === updatedTask.id ? updatedTask : task
+  //       )
+  //     );
+  //     setModalOpen(false);
+  //     success("Task update successfully!");
+  //   } catch (error) {
+  //     errorPopup(error.message);
+  //   } finally {
+  //     loading(false);
+  //   }
+  // };
 
   const handleOk = async (body: UpdateTaskPayload | CreateTaskPayload) => {
     if ("id" in body) {
@@ -66,7 +71,7 @@ const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
       handleUpdate(body);
     } else {
       // Add Task
-      handleAdd(body);
+      handleAddTask(body);
     }
   };
   const { setNodeRef } = useDroppable({ id: columnId });
@@ -100,7 +105,7 @@ const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
       </Flex>
       <Button
         className="w-full font-semibold flex justify-between items-center"
-        onClick={() => setModalOpen(true)}
+        onClick={() => setModalOpen(`${columnId}`)}
       >
         Add New Task
         <PlusOutlined />
@@ -109,10 +114,10 @@ const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
         <DraggableTask key={task.id} task={task} handleOk={handleOk} />
       ))}
 
-      {modalOpen && (
+      {modalOpen==`${columnId}` && (
         <TaskModal
-          open={modalOpen}
-          handleCancel={() => setModalOpen(false)}
+          open={modalOpen==`${columnId}`}
+          handleCancel={() => setModalOpen("")}
           handleOk={handleOk}
           isLoading={false}
           title="Add Task"

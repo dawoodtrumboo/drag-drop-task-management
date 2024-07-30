@@ -25,8 +25,12 @@ import {
   ShareAltOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import moment from "moment";
 import dayjs from "dayjs";
+import { BsStars } from "react-icons/bs";
+import { generateSuggestion } from "@/services/openaiApi";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import HtmlRenderer from "./HtmlRenderer";
 const { TextArea } = Input;
 
 const TaskModal: React.FC<TaskModalProps> = ({
@@ -38,7 +42,12 @@ const TaskModal: React.FC<TaskModalProps> = ({
 }) => {
   // Initialize form data with default values or existing data
 
-  const { auth, user } = useContext(StoreContext);
+  const {
+    user,
+    loading,
+    success,
+    error: errorPopup,
+  } = useContext(StoreContext);
   const [formData, setFormData] = useState<
     CreateTaskPayload | UpdateTaskPayload
   >({
@@ -47,6 +56,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
     description: "",
     status: type,
   });
+  const [suggestion, setSuggestion] = useState("");
+  const [isStreaming, setIsStreaming] = useState<boolean>(false);
 
   useEffect(() => {
     if (data) {
@@ -131,6 +142,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   const statusItems: MenuProps["items"] = [
     {
       label: "Open",
@@ -171,6 +183,131 @@ const TaskModal: React.FC<TaskModalProps> = ({
     },
   ];
 
+  // const handleAiGeneration = async () => {
+  //   loading();
+  //   if (!formData.title) {
+  //     errorPopup("Please fill in the title");
+  //     return;
+  //   }
+  //   if (!formData.status) {
+  //     errorPopup("Please select a status");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await generateSuggestion(formData, user.token);
+  //     console.log(response);
+  //     setSuggestion(response);
+  //     success("Suggestion generated successfully!");
+  //   } catch (error) {
+  //     errorPopup("Failed to generated Suggestion!");
+  //   } finally {
+  //     loading(false);
+  //   }
+  // };
+
+  // const handleAiGeneration = async () => {
+  //   loading();
+  //   if (!formData.title) {
+  //     errorPopup("Please fill in the title");
+  //     return;
+  //   }
+  //   if (!formData.status) {
+  //     errorPopup("Please select a status");
+  //     return;
+  //   }
+
+  //   setIsStreaming(true);
+  //   setSuggestion([""]);
+
+  //   const eventSource = new EventSource(
+  //     `${
+  //       process.env.NEXT_PUBLIC_API_URL
+  //     }/openai/generateSuggestion?title=${encodeURIComponent(
+  //       formData.title
+  //     )}&status=${encodeURIComponent(
+  //       formData.status
+  //     )}&description=${encodeURIComponent(
+  //       formData.description
+  //     )}&deadline=${encodeURIComponent(
+  //       dayjs(formData.deadline).format("YYYY/MM/DD")
+  //     )}&priority=${encodeURIComponent(formData.priority)}`
+  //   );
+
+  //   eventSource.onmessage = (event) => {
+  //     if (event.data === "[DONE]") {
+  //       setIsStreaming(false);
+  //       eventSource.close();
+  //     } else {
+  //       const newSuggestions = event.data
+  //         .split("\n")
+  //         .filter(Boolean)
+  //         .map((line, index) => ({
+  //           id: index,
+  //           text: line.trim(),
+  //         }));
+  //       setSuggestion((prev) => [...prev, ...newSuggestions]);
+  //       // setSuggestion((prev) => prev + event.data);
+  //     }
+  //   };
+
+  //   eventSource.onerror = (error) => {
+  //     console.error("EventSource failed:", error);
+  //     errorPopup("Failed to generate suggestion!");
+  //     setIsStreaming(false);
+  //     eventSource.close();
+  //   };
+  // };
+
+  useEffect(() => {
+    if (!isStreaming) return;
+
+    // Construct the EventSource URL
+
+    const url = `${
+      process.env.NEXT_PUBLIC_API_URL
+    }/openai/generateSuggestion?title=${encodeURIComponent(
+      formData.title
+    )}&status=${encodeURIComponent(
+      formData.status
+    )}&description=${encodeURIComponent(
+      formData.description
+    )}&deadline=${encodeURIComponent(
+      dayjs(formData.deadline).format("YYYY/MM/DD")
+    )}&priority=${encodeURIComponent(formData.priority)}`;
+
+    const eventSource = new EventSource(url);
+
+    eventSource.onmessage = (event) => {
+      if (event.data === "[DONE]") {
+        setIsStreaming(false);
+        eventSource.close();
+      } else {
+        // Parse the incoming data
+        let text = event.data;
+
+        setSuggestion((prev) => prev + text);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error("EventSource failed:", error);
+      errorPopup("Failed to generate suggestion!");
+      setIsStreaming(false);
+      eventSource.close();
+    };
+
+    return () => {
+      if (eventSource.readyState === EventSource.OPEN) {
+        eventSource.close();
+      }
+    };
+  }, [isStreaming, formData]);
+
+  const handleAiGeneration = () => {
+    setSuggestion("");
+    setIsStreaming(true);
+  };
+  console.log(suggestion);
   return (
     <Drawer
       className="!bg-white "
@@ -188,7 +325,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         value={formData.title}
       />
 
-      <div className="!w-full my-5 space-y-4">
+      <div className="!w-full my-5 space-y-4 border-b-[1px] border-gray-200">
         <Flex className="!w-full">
           <div className="flex items-center gap-3 min-w-[150px]">
             <StatusIcon width={16} />
@@ -262,6 +399,22 @@ const TaskModal: React.FC<TaskModalProps> = ({
             onChange={(e) => handleChange(e.target.value, e.target.name)}
           />
         </Flex>
+      </div>
+      <div className="flex-col flex gap-5">
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-semibold">Notes</h2>
+          <Button
+            type="primary"
+            onClick={handleAiGeneration}
+            disabled={isStreaming || formData.title === ""}
+          >
+            <BsStars />
+            Generate Suggestion
+          </Button>
+        </div>
+        <div>
+          <HtmlRenderer htmlString={suggestion} />
+        </div>
       </div>
     </Drawer>
   );

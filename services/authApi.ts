@@ -1,6 +1,6 @@
 import { LoginPayload, SignupPayload } from "@/types/AuthTypes";
 
-const API_URL = "https://api.dawoodtrumboo.com/auth";
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
 
 const headers = () => ({
   "Content-Type": "application/json",

@@ -7,12 +7,13 @@ import React, { useContext } from "react";
 import { StoreProvider } from "./context/context";
 import BaseLayout from "@/app/components/Layout";
 import { useRouter } from "next/router";
+import { TaskProvider } from "./context/task.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Trello",
-  description: "A Task Management App",
+  title: "Surge",
+  description: "An AI Powered Task Management App",
 };
 
 export default function RootLayout({
@@ -27,8 +28,10 @@ export default function RootLayout({
       <body>
         <StoreProvider>
           {/* {contextHolder} */}
+          <TaskProvider>
 
           <BaseLayout>{children}</BaseLayout>
+          </TaskProvider>
         </StoreProvider>
       </body>
     </html>

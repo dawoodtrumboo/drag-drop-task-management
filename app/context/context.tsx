@@ -17,26 +17,20 @@ import { useRouter } from "next/navigation";
 type AppContextType = {
   auth: undefined | LoginResponse;
   setAuth: Dispatch<SetStateAction<LoginResponse | undefined>>;
-  tasks: FetchedTask[];
-  setTasks: Dispatch<SetStateAction<FetchedTask[]>>;
   success: (message: string) => void;
   contextHolder: React.ReactNode;
   loading: (loading?: boolean) => void;
   messageApi: any;
-  logout: () => void;
   error: (message: string) => void;
   user: undefined | LoginResponse;
 };
 export const StoreContext = React.createContext<AppContextType>({
   auth: undefined,
   setAuth: () => {},
-  tasks: [],
-  setTasks: () => {},
   success: () => {},
   contextHolder: null,
   loading: () => {},
   messageApi: message,
-  logout: () => {},
   error: () => {},
   user: undefined,
 });
@@ -45,7 +39,6 @@ export const StoreProvider = ({
   children,
 }: Readonly<{ children: React.ReactNode }>) => {
   const [auth, setAuth] = useState<LoginResponse | undefined>(undefined);
-  const [tasks, setTasks] = useState<FetchedTask[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   let user;
@@ -100,12 +93,7 @@ export const StoreProvider = ({
     // Dismiss manually and asynchronously
   };
 
-  const logout = () => {
-    localStorage.removeItem("userDetails");
-    setAuth(undefined);
-    setTasks([]);
-    router.push("/auth");
-  };
+
 
 
   
@@ -115,14 +103,11 @@ export const StoreProvider = ({
       value={{
         auth,
         setAuth,
-        tasks,
-        setTasks,
         success,
         error,
         loading,
         contextHolder,
         messageApi,
-        logout,
         user,
       }}
     >
