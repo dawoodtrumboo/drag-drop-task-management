@@ -62,6 +62,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
   useEffect(() => {
     if (data) {
       setFormData(data);
+      if (data.suggestion) {
+        setSuggestion(data.suggestion);
+      }
     }
   }, [data]);
 
@@ -94,7 +97,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
     });
     handleCancel();
   };
-
+  const handleSave = () => {
+    let data;
+    if (suggestion) {
+      data = { ...formData, suggestion };
+    }
+    handleOk(data);
+  };
   const drawerHeader = (
     <Flex justify="space-between">
       <FullscreenOutlined
@@ -108,7 +117,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
           <ShareAltOutlined className="text-md" />
         </Button>
         <Button
-          onClick={() => handleOk(formData)}
+          disabled={isStreaming || formData.title === ""}
+          onClick={() => handleSave()}
           type="primary"
           className="text-xs px-5  border-none rounded-sm font-light "
         >
@@ -183,81 +193,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
     },
   ];
 
-  // const handleAiGeneration = async () => {
-  //   loading();
-  //   if (!formData.title) {
-  //     errorPopup("Please fill in the title");
-  //     return;
-  //   }
-  //   if (!formData.status) {
-  //     errorPopup("Please select a status");
-  //     return;
-  //   }
-  //   try {
-  //     const response = await generateSuggestion(formData, user.token);
-  //     console.log(response);
-  //     setSuggestion(response);
-  //     success("Suggestion generated successfully!");
-  //   } catch (error) {
-  //     errorPopup("Failed to generated Suggestion!");
-  //   } finally {
-  //     loading(false);
-  //   }
-  // };
-
-  // const handleAiGeneration = async () => {
-  //   loading();
-  //   if (!formData.title) {
-  //     errorPopup("Please fill in the title");
-  //     return;
-  //   }
-  //   if (!formData.status) {
-  //     errorPopup("Please select a status");
-  //     return;
-  //   }
-
-  //   setIsStreaming(true);
-  //   setSuggestion([""]);
-
-  //   const eventSource = new EventSource(
-  //     `${
-  //       process.env.NEXT_PUBLIC_API_URL
-  //     }/openai/generateSuggestion?title=${encodeURIComponent(
-  //       formData.title
-  //     )}&status=${encodeURIComponent(
-  //       formData.status
-  //     )}&description=${encodeURIComponent(
-  //       formData.description
-  //     )}&deadline=${encodeURIComponent(
-  //       dayjs(formData.deadline).format("YYYY/MM/DD")
-  //     )}&priority=${encodeURIComponent(formData.priority)}`
-  //   );
-
-  //   eventSource.onmessage = (event) => {
-  //     if (event.data === "[DONE]") {
-  //       setIsStreaming(false);
-  //       eventSource.close();
-  //     } else {
-  //       const newSuggestions = event.data
-  //         .split("\n")
-  //         .filter(Boolean)
-  //         .map((line, index) => ({
-  //           id: index,
-  //           text: line.trim(),
-  //         }));
-  //       setSuggestion((prev) => [...prev, ...newSuggestions]);
-  //       // setSuggestion((prev) => prev + event.data);
-  //     }
-  //   };
-
-  //   eventSource.onerror = (error) => {
-  //     console.error("EventSource failed:", error);
-  //     errorPopup("Failed to generate suggestion!");
-  //     setIsStreaming(false);
-  //     eventSource.close();
-  //   };
-  // };
-
   useEffect(() => {
     if (!isStreaming) return;
 
@@ -307,6 +242,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setSuggestion("");
     setIsStreaming(true);
   };
+
   console.log(suggestion);
   return (
     <Drawer

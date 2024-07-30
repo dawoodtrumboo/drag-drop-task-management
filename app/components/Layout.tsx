@@ -100,7 +100,7 @@ export default function BaseLayout({
               icon={<UserOutlined className="text-white" />}
             />
             <h2 className="!text-gray-800 font-semibold text-md">
-              {user?.user.name}
+              {user?.user?.name}
             </h2>
           </Space>
         </Flex>

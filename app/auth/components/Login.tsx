@@ -25,7 +25,7 @@ const Login: React.FC = () => {
       console.log("asdas");
       const data = await signin(signinForm);
       console.log(data);
-      if (data.message == "Validation failed") {
+      if (data.message) {
         if (data.errors?.length > 0) {
           setSigninError(data.errors);
         } else {

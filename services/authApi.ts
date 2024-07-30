@@ -9,11 +9,11 @@ const headers = () => ({
 export const signin = async (body: LoginPayload) => {
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
-    headers:headers(),
+    headers: headers(),
     body: JSON.stringify(body),
   });
 
-  if (response.status >=500) {
+  if (response.status >= 500) {
     throw new Error("Failed to add task");
   }
   console.log(response);
@@ -30,7 +30,7 @@ export const signup = async (body: SignupPayload) => {
     body: JSON.stringify(body),
   });
 
-  if (response.status >=500) {
+  if (response.status >= 500) {
     throw new Error("Failed to add task");
   }
 
@@ -38,15 +38,13 @@ export const signup = async (body: SignupPayload) => {
   return data;
 };
 
-export const googleSignin = async (code:string|string[]) => {
-  const response = await fetch(`${API_URL}/google/callback?code=${code}`, {
-  });
+export const googleSignin = async (code: string | string[]) => {
+  const response = await fetch(`${API_URL}/google/callback?code=${code}`, {});
 
-  if (response.status >=500) {
+  if (response.status >= 500) {
     throw new Error("Failed to add task");
   }
 
   const data = await response.json();
   return data;
 };
-

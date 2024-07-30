@@ -66,6 +66,7 @@ export interface CreateTaskPayload {
   status: ColumnType;
   priority?: PriorityType;
   deadline?: Date;
+  suggestion?: string;
 }
 
 export interface UpdateTaskPayload extends CreateTaskPayload {
