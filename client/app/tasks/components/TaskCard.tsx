@@ -29,21 +29,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
   const date = new Date(data.updatedAt);
   const readableDate = timeAgo(date);
 
-  // const handleDelete = async (taskParams) => {
-  //   loading();
-  //   try {
-  //     await deleteTask(taskParams);
-  //     const filteredTasks = tasks.filter((task) => task.id !== data.id);
-  //     setTasks(filteredTasks);
-  //     success("Task deleted successfully");
-  //     setModalOpen("");
-  //   } catch (error) {
-  //     errorPopup(error.message);
-  //   } finally {
-  //     loading(false);
-  //   }
-  // };
-
   const onEdit = async () => {
     try {
       loading();
@@ -57,6 +42,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ data, handleOk }) => {
       setPopoverVisible(false);
     }
   };
+
   const content = (
     <Flex vertical>
       <div

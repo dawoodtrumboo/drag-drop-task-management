@@ -122,7 +122,13 @@ const ListView = () => {
 
   return (
     <>
-      <Table columns={columns} dataSource={tasks} pagination={false} />
+      <Table
+        className="overflow-x-scroll w-full"
+        columns={columns}
+        dataSource={tasks}
+        pagination={false}
+        rowClassName="bg-white"
+      />
 
       {modalOpen == "taskcard" && (
         <TaskModal
