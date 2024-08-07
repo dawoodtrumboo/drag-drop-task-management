@@ -8,6 +8,7 @@ import { StoreProvider } from "./context/context";
 import BaseLayout from "@/app/components/Layout";
 import { useRouter } from "next/router";
 import { TaskProvider } from "./context/task.context";
+import logo from "./favicon.ico";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,8 +30,7 @@ export default function RootLayout({
         <StoreProvider>
           {/* {contextHolder} */}
           <TaskProvider>
-
-          <BaseLayout>{children}</BaseLayout>
+            <BaseLayout>{children}</BaseLayout>
           </TaskProvider>
         </StoreProvider>
       </body>

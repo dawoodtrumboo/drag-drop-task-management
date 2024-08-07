@@ -57,7 +57,7 @@ export const TaskProvider = ({
     loading();
     try {
       const task = await addTask(body, user.token);
-      setTasks((prev) => [...prev, task]);
+      setTasks((prev) => [task, ...prev]);
       setModalOpen("");
       success("Task added successfully!");
     } catch (error) {

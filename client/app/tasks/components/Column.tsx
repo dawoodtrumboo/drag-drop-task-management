@@ -15,8 +15,9 @@ import { addTask, updateTask } from "@/services/taskApi";
 import { TaskContext } from "@/app/context/task.context";
 
 const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
-  const{modalOpen,setModalOpen,handleAddTask,handleUpdate} = useContext(TaskContext)
-  
+  const { modalOpen, setModalOpen, handleAddTask, handleUpdate } =
+    useContext(TaskContext);
+
   const [isAscending, setIsAscending] = useState(false);
   const {
     success,
@@ -24,8 +25,6 @@ const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
     loading,
     user,
   } = useContext(StoreContext);
-
-
 
   const [filteredTasks, setFilteredTasks] = useState(tasks);
 
@@ -66,6 +65,7 @@ const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
   // };
 
   const handleOk = async (body: UpdateTaskPayload | CreateTaskPayload) => {
+    console.log(body);
     if ("id" in body) {
       // Update Task
       handleUpdate(body);
@@ -114,9 +114,9 @@ const Column: React.FC<ColumnProps> = ({ type, tasks, columnId }) => {
         <DraggableTask key={task.id} task={task} handleOk={handleOk} />
       ))}
 
-      {modalOpen==`${columnId}` && (
+      {modalOpen == `${columnId}` && (
         <TaskModal
-          open={modalOpen==`${columnId}`}
+          open={modalOpen == `${columnId}`}
           handleCancel={() => setModalOpen("")}
           handleOk={handleOk}
           isLoading={false}

@@ -98,10 +98,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
     handleCancel();
   };
   const handleSave = () => {
-    let data;
+    let data = formData;
     if (suggestion) {
       data = { ...formData, suggestion };
     }
+    console.log(data);
     handleOk(data);
   };
   const drawerHeader = (

@@ -22,6 +22,7 @@ import {
   MailOutlined,
   PieChartOutlined,
   PlusCircleFilled,
+  PlusOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
   TeamOutlined,
@@ -31,13 +32,25 @@ import { usePathname } from "next/navigation";
 import { StoreContext } from "../context/context";
 import Logo from "../../public/assets/logo.svg";
 import { TaskContext } from "../context/task.context";
+import { BsBriefcase } from "react-icons/bs";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const items: MenuItem[] = [
   { key: "/tasks", icon: <AppstoreOutlined />, label: "Tasks" },
 
-  { key: "/settings", icon: <SettingOutlined />, label: "Settings" },
+  {
+    key: "/Workspaces",
+    icon: <BsBriefcase />,
+    label: "Workspaces",
+    children: [
+      {
+        key: "Add Workspace",
+        icon: <PlusOutlined />,
+        label: "Add Workspace",
+      },
+    ],
+  },
 ];
 
 const { Header, Content, Sider } = Layout;
@@ -48,6 +61,7 @@ export default function BaseLayout({
   children: React.ReactNode;
 }>) {
   const router = usePathname();
+  const isAuthRoute = router?.startsWith("/auth");
   const { logout } = useContext(TaskContext);
   let user;
   if (typeof window !== "undefined") {
@@ -72,7 +86,7 @@ export default function BaseLayout({
 
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
-  return router === "/tasks" ? (
+  return !isAuthRoute ? (
     <Layout className="min-h-screen">
       <Sider
         breakpoint="lg"

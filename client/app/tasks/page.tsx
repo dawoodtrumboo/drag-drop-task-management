@@ -30,7 +30,7 @@ import Card from "./components/Card";
 import Icon1 from "../../public/assets/image1.svg";
 import Icon2 from "../../public/assets/image2.svg";
 import { withAuth } from "../withAuth";
-import { addTask, fetchTasks } from "@/services/taskApi";
+import { fetchTasks } from "@/services/taskApi";
 import { TaskContext, TaskProvider } from "../context/task.context";
 const { Search } = Input;
 

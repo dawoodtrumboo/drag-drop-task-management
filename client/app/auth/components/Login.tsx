@@ -1,8 +1,9 @@
 import { StoreContext } from "@/app/context/context";
 import { signin } from "@/services/authApi";
 import { GooglePlusOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import { useRouter } from "next/navigation";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 const Login: React.FC = () => {
   const [signinForm, setSigninForm] = React.useState({
     email: "",
@@ -16,10 +17,14 @@ const Login: React.FC = () => {
     messageApi,
   } = useContext(StoreContext);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
     e.preventDefault();
+    setIsLoading(true);
     loading();
     try {
       console.log("asdas");
@@ -39,6 +44,7 @@ const Login: React.FC = () => {
     } catch (error) {
       errorPopup(error.message);
     } finally {
+      setIsLoading(false);
       messageApi.destroy();
     }
   };
@@ -52,7 +58,7 @@ const Login: React.FC = () => {
   };
   return (
     <div className="form-container sign-in-container ">
-      <form onSubmit={handleOnSubmit}>
+      <form>
         <h1 className="text-black text-3xl font-bold">Sign In</h1>
         <div className="social-container">
           <a
@@ -90,9 +96,13 @@ const Login: React.FC = () => {
           </ul>
         </div>
 
-        <button className="bg-[#438ACC] text-white font-bold px-[45px] py-[10px] uppercase transition-transform 80ms ease-in rounded-full text-xs">
+        <Button
+          onClick={(e) => handleOnSubmit(e)}
+          loading={isLoading}
+          className="bg-[#438ACC] text-white font-bold px-[45px] py-[10px] uppercase transition-transform 80ms ease-in rounded-full text-xs hover:bg-[#438ACC] hover:text-white"
+        >
           Sign In
-        </button>
+        </Button>
       </form>
     </div>
   );
