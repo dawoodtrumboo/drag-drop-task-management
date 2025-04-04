@@ -12,5 +12,4 @@ template:
   # You can add other template configurations here
   # feature:
   #   selector:
-  #     - head-branch: ["feature/*"]
-  #   template: .github/PULL_REQUEST_TEMPLATE/feature.md
+  #     - head-branch: ["feature/*"]g
