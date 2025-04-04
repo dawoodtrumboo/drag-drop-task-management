@@ -18,7 +18,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const fs = require('fs');
-            const hotfixTemplate = fs.readFileSync('.github/pr_templates/hotfix.md', 'utf8');
+            const hotfixTemplate = fs.readFileSync('.github/PR_TEMPLATES/hotfix.md', 'utf8');
             
             await github.rest.pulls.update({
               owner: context.repo.owner,

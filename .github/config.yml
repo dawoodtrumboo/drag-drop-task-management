@@ -7,7 +7,7 @@ template:
       - head-branch:
           - /^hotfix\/.*$/
           - /^fix\/.*$/
-    template: .github/pr_templates/hotfix.md
+    template: .github/PR_TEMPLATES/hotfix.md
   
   # You can add other template configurations here
   # feature:
