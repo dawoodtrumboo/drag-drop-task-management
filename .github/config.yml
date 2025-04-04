@@ -1,0 +1,16 @@
+# .github/config.yml
+# Configure PR templates based on branch naming patterns
+template:
+  # Use hotfix template when PR is created from branches starting with 'hotfix/' or 'fix/'
+  hotfix:
+    selector:
+      - head-branch:
+          - /^hotfix\/.*$/
+          - /^fix\/.*$/
+    template: .github/pr_templates/hotfix.md
+  
+  # You can add other template configurations here
+  # feature:
+  #   selector:
+  #     - head-branch: ["feature/*"]
+  #   template: .github/PULL_REQUEST_TEMPLATE/feature.md
