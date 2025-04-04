@@ -12,4 +12,5 @@ template:
   # You can add other template configurations here
   # feature:
   #   selector:
-  #     - head-branch: ["feature/*"]g
+  #     - head-branch: ["feature/*"]
+  #   template: .github/pr_templates/feature.md
