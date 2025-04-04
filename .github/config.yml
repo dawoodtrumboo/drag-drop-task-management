@@ -13,4 +13,4 @@ template:
   # feature:
   #   selector:
   #     - head-branch: ["feature/*"]
-  #   template: .github/PULL_REQUEST_TEMPLATE/feature.md
+  #   template: .github/pr_templates/feature.md
