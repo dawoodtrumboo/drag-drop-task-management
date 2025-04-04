@@ -1,0 +1,1 @@
+<!-- No template for non-hotfix branches -->
